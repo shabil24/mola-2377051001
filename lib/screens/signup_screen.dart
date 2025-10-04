@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/login_screen.dart';
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   static const route = '/signup';
@@ -24,45 +24,85 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget requiredLabel(String text) => Row(
-          children: [
-            Text(text, style: const TextStyle(fontSize: 13)),
-            const Text(' *',
-                style: TextStyle(color: Colors.red, fontSize: 13)),
-          ],
-        );
+  // Label wajib isi
+  Widget requiredLabel(String text) => Row(
+        children: [
+          Text(text, style: const TextStyle(fontSize: 13)),
+          const Text("*",
+              style: TextStyle(color: Colors.red, fontSize: 13)),
+        ],
+      );
 
-    Widget primaryButton(String label, VoidCallback onTap) => GestureDetector(
-          onTap: onTap,
-          child: Container(
-            width: double.infinity,
-            height: 46,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1E88FF), Color(0xFF207DFF)],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF1E88FF).withOpacity(0.25),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+  // Tombol biru gradient
+  Widget primaryButton(String label, VoidCallback onTap) => GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          height: 46,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(28),
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1E88E5), Color(0xFF207DFF)],
             ),
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0xFF1E88E5),
+                blurRadius: 10,
+                offset: Offset(0, 4),
               ),
+            ],
+          ),
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
-        );
+        ),
+      );
 
+  // Fungsi validasi pendaftaran
+  void _signup() {
+    if (_name.text.isEmpty ||
+        _email.text.isEmpty ||
+        _pass.text.isEmpty ||
+        _confirm.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Semua kolom harus diisi!"),
+            backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    if (_pass.text != _confirm.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Password tidak cocok!"),
+            backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    // Jika validasi berhasil
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text("Pendaftaran berhasil! Silakan masuk."),
+          backgroundColor: Colors.green),
+    );
+
+    // Setelah signup -> pindah ke login dan hapus stack navigasi
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      LoginScreen.route,
+      (route) => false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -71,22 +111,22 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // logo
+                // Logo Disesuaikan: menggunakan 'assets/images/Jusduit.png'
                 Image.asset(
-                  'assets/logo-mola.png',
+                  'images/Jusduit.png',
                   height: 80,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 18),
 
-                // judul
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
+                // Judul Disesuaikan: mengubah dari "Justchat" menjadi "Jusduit"
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Sign Up Now and Unlock the Power of JustDuit',
-                      style: TextStyle(
+                      "Sign Up Now and Unlock the Power of Jusduit!",
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
@@ -95,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 14),
 
-                // form card
+                // Card Form
                 Container(
                   width: 360,
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -103,84 +143,77 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
+                        color: Colors.black12,
+                        blurRadius: 10,
+                        offset: Offset(0, 6),
                       ),
                     ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      requiredLabel('Full Name'),
+                      requiredLabel("Full Name"),
                       const SizedBox(height: 6),
                       TextField(
                         controller: _name,
+                        textCapitalization: TextCapitalization.words,
                         decoration: const InputDecoration(
-                          hintText: 'Enter your full name',
+                          hintText: "Enter your full name",
                         ),
                       ),
                       const SizedBox(height: 14),
 
-                      requiredLabel('Email Address'),
+                      requiredLabel("Email Address"),
                       const SizedBox(height: 6),
                       TextField(
                         controller: _email,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
-                          hintText: 'Enter your email',
+                          hintText: "Enter your email",
                         ),
                       ),
                       const SizedBox(height: 14),
 
-                      requiredLabel('Password'),
+                      requiredLabel("Password"),
                       const SizedBox(height: 6),
                       TextField(
                         controller: _pass,
                         obscureText: true,
                         decoration: const InputDecoration(
-                          hintText: 'Enter your password',
+                          hintText: "Create a password",
                         ),
                       ),
                       const SizedBox(height: 14),
 
-                      requiredLabel('Confirm Password'),
+                      requiredLabel("Confirm Password"),
                       const SizedBox(height: 6),
                       TextField(
                         controller: _confirm,
                         obscureText: true,
                         decoration: const InputDecoration(
-                          hintText: 'Re-enter your password',
+                          hintText: "Re-enter your password",
                         ),
                       ),
                       const SizedBox(height: 16),
 
-                      primaryButton('Continue', () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Sign Up Success')),
-                        );
-
-                        // langsung pindah ke login, hapus semua route sebelumnya
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          LoginScreen.route,
-                          (route) => false,
-                        );
-                      }),
-                      const SizedBox(height: 14),
+                      // Tombol Continue (memanggil fungsi validasi)
+                      primaryButton("Continue", _signup),
+                      const SizedBox(height: 12),
 
                       Center(
                         child: TextButton(
-                          onPressed: () => Navigator.pushReplacementNamed(
-                              context, LoginScreen.route),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, LoginScreen.route);
+                          },
                           child: const Text(
-                            'Already have an account? Sign In',
+                            "Sign In",
                             style: TextStyle(fontSize: 13),
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
