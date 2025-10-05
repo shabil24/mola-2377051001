@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
+  // Properti statis route
   static const String route = '/dashboard';
 
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Scaffold utama
     return Scaffold(
       backgroundColor: Colors.grey[100], // Latar belakang abu-abu muda
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text(
+          'Dashboard',
+          style: TextStyle(color: Colors.black), // Warna teks hitam
+        ),
         backgroundColor: Colors.white,
-        elevation: 1,
-        automaticallyImplyLeading: false,
+        elevation: 1, // Sedikit bayangan di bawah AppBar
+        automaticallyImplyLeading: false, // Menghilangkan tombol back otomatis
       ), // AppBar
 
       // COLUMN: Menyusun semua konten dari atas ke bawah
@@ -28,7 +33,7 @@ class DashboardScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
             const Text(
-              'Shabil Ramadhan',
+              'Shabil Ramadhan', // Nama pengguna
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -36,7 +41,7 @@ class DashboardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24), // Spasi antar elemen
 
-            // --- Kartu Informasi Utama ---
+            // --- Kartu Informasi Utama (Saldo) ---
             Container(
               width: double.infinity, // Lebar kartu memenuhi layar
               padding: const EdgeInsets.all(16),
@@ -45,7 +50,9 @@ class DashboardScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.15), // ✅ diperbaiki
+                    // ✅ PERBAIKAN: Menggunakan .withAlpha() sebagai pengganti.
+                    // 0.15 (opacity) dari 255 (alpha maksimum) adalah sekitar 38.
+                    color: Colors.grey.withAlpha(38), 
                     spreadRadius: 1,
                     blurRadius: 10,
                     offset: const Offset(0, 5),
@@ -83,9 +90,11 @@ class DashboardScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // Aksi tombol lihat detail transaksi
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E88E5),
+                        backgroundColor: const Color(0xFF1E88E5), // Warna biru utama
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
@@ -97,7 +106,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ), // Container
+            ), // Container Kartu Saldo
           ],
         ),
       ),
